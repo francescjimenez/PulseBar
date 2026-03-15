@@ -1,4 +1,4 @@
-<img src="UI/Banner.png" alt="PulseBar" width="600" />
+<img src="UI/Banner.png" alt="PulseBar" />
 
 # PulseBar
 
