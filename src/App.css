@@ -1,0 +1,318 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  background: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  overflow: hidden;
+}
+
+/* ── Widget shell ────────────────────────────────────────────── */
+/* Blur is provided by NSVisualEffectView (Rust); this is the purple tint on top */
+.widget {
+  width: 360px;
+  height: 100vh;
+  background: rgba(6, 6, 18, 0.60);
+  border: 1px solid rgba(255,255,255,0.13);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Scrollable panel area ───────────────────────────────────── */
+.panel-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.panel-scroll::-webkit-scrollbar { width: 4px; }
+.panel-scroll::-webkit-scrollbar-track { background: transparent; }
+.panel-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+/* ── Panel ───────────────────────────────────────────────────── */
+.panel {
+  padding: 16px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Panel title (replaces tab bar) */
+.panel-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  margin-bottom: 4px;
+}
+
+/* ── Ring charts ─────────────────────────────────────────────── */
+.panel-rings {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 4px 0 6px;
+}
+.ring-wrap svg { display: block; }
+
+/* ── Chart legend ────────────────────────────────────────────── */
+.chart-legend {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #7070a0;
+}
+.legend-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.legend-label { flex: 1; }
+.legend-val { font-variant-numeric: tabular-nums; color: #c0c0d8; font-weight: 500; }
+
+/* ── Bar chart ───────────────────────────────────────────────── */
+.bar-chart {
+  display: block;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.03);
+}
+
+/* ── CPU top: ring left, cores right ─────────────────────────── */
+.cpu-top {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.cpu-top-left {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.cpu-temp {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.cpu-top-right {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ── Core grid ───────────────────────────────────────────────── */
+
+.section-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  color: #0a84ff;
+  margin-bottom: 4px;
+}
+
+.cores-grid {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.core-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.core-bar-bg {
+  width: 12px;
+  height: 28px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 3px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+.core-bar-fill {
+  width: 100%;
+  border-radius: 2px;
+  transition: height 0.4s ease;
+}
+.core-idx {
+  font-size: 8px;
+  color: #555070;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Metrics list ────────────────────────────────────────────── */
+.metrics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.metric-label {
+  font-size: 12px;
+  color: #7070a0;
+}
+.metric-value {
+  font-size: 12px;
+  font-weight: 500;
+  color: #ddd8f0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Big stats (Network) ─────────────────────────────────────── */
+.big-stats-row {
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 0 4px;
+}
+.big-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.big-val {
+  font-size: 22px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.big-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #7070a0;
+  text-transform: uppercase;
+}
+
+/* ── Processes ───────────────────────────────────────────────── */
+.proc-section {
+  margin-top: 4px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.proc-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 10px 5px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.proc-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  color: #0a84ff;
+}
+.proc-col-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #555070;
+  letter-spacing: 0.04em;
+}
+.proc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.025);
+}
+.proc-row:last-child { border-bottom: none; }
+.proc-name {
+  font-size: 11.5px;
+  color: #c8c4e0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}
+.proc-val {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #9990c0;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+/* ── Disk panel ──────────────────────────────────────────────── */
+.disk-card {
+  background: rgba(255,255,255,0.03);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.disk-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.disk-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e0daf5;
+}
+.disk-avail {
+  font-size: 11px;
+  color: #7070a0;
+  font-variant-numeric: tabular-nums;
+}
+.disk-rings {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.disk-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.disk-bar-bg {
+  height: 4px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.disk-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+/* ── Misc ────────────────────────────────────────────────────── */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 13px;
+  color: #444060;
+}
+.empty-msg {
+  font-size: 12px;
+  color: #444060;
+  text-align: center;
+  padding: 20px 0;
+}
