@@ -1,8 +1,12 @@
+<img src="UI/Banner.png" alt="PulseBar" width="600" />
+
 # PulseBar
 
 A macOS menu bar system monitor inspired by iStat Menus. Live CPU, RAM, Network, and Disk stats visible at a glance from the menu bar — no dock icon, no window chrome.
 
 Built with **Tauri v2**, **React 19**, and **Rust** (`sysinfo 0.33`).
+
+> **Privacy notice:** The Network panel fetches your external IP address and country from [ipwho.is](https://ipwho.is) (cached every 5 minutes). No other data leaves your machine.
 
 ---
 
@@ -26,6 +30,14 @@ Click any one to open a panel focused on that category. Click elsewhere (or the 
 | **Memory**  | RAM % ring, Swap ring, bar history, used / free / swap breakdown, top 5 processes by RAM |
 | **Network** | Upload & download speed, dual bar history, session peak speeds |
 | **Disk**    | Per-disk usage ring + progress bar, used / free / total GB |
+
+---
+
+## Download
+
+**[Download PulseBar v1.0.0](https://github.com/francescjimenez/PulseBar/releases/tag/v1.0.0)** — macOS (Apple Silicon)
+
+> If macOS blocks the app on first launch: right-click → Open, then click "Open" in the dialog.
 
 ---
 
@@ -66,40 +78,6 @@ npm run tauri build
 ```
 
 Output: `src-tauri/target/release/bundle/macos/PulseBar.app`
-
----
-
-## Project Structure
-
-```
-PulseBar/
-├── src/
-│   ├── App.jsx             # Main app — polling loop, history state, panel routing
-│   ├── App.css             # Dark widget styles (360×540, #14112a background)
-│   ├── main.jsx            # React entry point
-│   ├── utils.js            # Format helpers (fmtNet, fmtGB, fmtMem) + history constants
-│   ├── components/
-│   │   ├── RingChart.jsx   # SVG donut chart
-│   │   ├── BarChart.jsx    # SVG bar history chart
-│   │   ├── MetricRow.jsx   # Label / value row
-│   │   ├── BigStat.jsx     # Large colored value + label
-│   │   └── ProcessList.jsx # Ranked process table
-│   └── panels/
-│       ├── CPUPanel.jsx    # CPU & GPU panel
-│       ├── MemPanel.jsx    # Memory panel
-│       ├── NetPanel.jsx    # Network panel
-│       └── DiskPanel.jsx   # Disk panel
-├── src-tauri/
-│   ├── src/
-│   │   ├── lib.rs          # Rust core: Stats structs, AppState, tray icons, background thread
-│   │   └── main.rs         # Tauri entry point (calls lib::run())
-│   ├── tauri.conf.json     # Window + bundle configuration
-│   └── capabilities/
-│       └── default.json    # Tauri permission grants
-├── index.html
-├── vite.config.js
-└── package.json
-```
 
 ---
 
