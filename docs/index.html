@@ -33,7 +33,7 @@
       --section-gap: 140px;
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
 
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -65,6 +65,7 @@
       pointer-events: none;
       z-index: 0;
       overflow: hidden;
+      clip-path: inset(0);
     }
     .bg-orbs span {
       position: absolute;
@@ -100,21 +101,21 @@
     }
 
     @keyframes float-blue {
-      0%   { transform: translate(0, 0)           scale(1);    filter: blur(130px) hue-rotate(0deg);  }
-      30%  { transform: translate(300px, 150px)   scale(1.1);  filter: blur(140px) hue-rotate(15deg); }
-      60%  { transform: translate(550px, 400px)   scale(0.95); filter: blur(120px) hue-rotate(25deg); }
-      100% { transform: translate(700px, 650px)   scale(1.05); filter: blur(135px) hue-rotate(10deg); }
+      0%   { transform: translate(0, 0)            scale(1);    filter: blur(130px) hue-rotate(0deg);  }
+      30%  { transform: translate(20vw, 10vh)      scale(1.1);  filter: blur(140px) hue-rotate(15deg); }
+      60%  { transform: translate(38vw, 28vh)      scale(0.95); filter: blur(120px) hue-rotate(25deg); }
+      100% { transform: translate(48vw, 44vh)      scale(1.05); filter: blur(135px) hue-rotate(10deg); }
     }
     @keyframes float-purple {
-      0%   { transform: translate(0, 0)            scale(1);    filter: blur(130px) hue-rotate(0deg);   }
-      30%  { transform: translate(-280px, -180px)  scale(1.08); filter: blur(145px) hue-rotate(-15deg); }
-      60%  { transform: translate(-520px, -380px)  scale(0.97); filter: blur(125px) hue-rotate(-25deg); }
-      100% { transform: translate(-700px, -600px)  scale(1.04); filter: blur(138px) hue-rotate(-10deg); }
+      0%   { transform: translate(0, 0)             scale(1);    filter: blur(130px) hue-rotate(0deg);   }
+      30%  { transform: translate(-20vw, -12vh)     scale(1.08); filter: blur(145px) hue-rotate(-15deg); }
+      60%  { transform: translate(-38vw, -26vh)     scale(0.97); filter: blur(125px) hue-rotate(-25deg); }
+      100% { transform: translate(-48vw, -42vh)     scale(1.04); filter: blur(138px) hue-rotate(-10deg); }
     }
     @keyframes float-accent {
       0%   { transform: translate(0, 0)           scale(1);    filter: blur(130px) hue-rotate(0deg);  }
-      50%  { transform: translate(-120px, 180px)  scale(1.12); filter: blur(150px) hue-rotate(20deg); }
-      100% { transform: translate(100px, -150px)  scale(0.9);  filter: blur(125px) hue-rotate(-10deg);}
+      50%  { transform: translate(-8vw, 12vh)     scale(1.12); filter: blur(150px) hue-rotate(20deg); }
+      100% { transform: translate(7vw, -10vh)     scale(0.9);  filter: blur(125px) hue-rotate(-10deg);}
     }
 
     /* ── Layout helpers ── */
@@ -216,10 +217,16 @@
     }
     .hero h1 em {
       font-style: normal;
-      background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+      background: linear-gradient(90deg, var(--blue) 0%, var(--purple) 40%, #ff6bdf 65%, var(--blue) 100%);
+      background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      animation: text-shine 5s linear infinite;
+    }
+    @keyframes text-shine {
+      0%   { background-position: 0% center; }
+      100% { background-position: 200% center; }
     }
     .hero-sub {
       font-size: clamp(17px, 2.2vw, 21px);
@@ -331,7 +338,7 @@
     .menubar-image-wrap::before {
       content: '';
       position: absolute;
-      inset: -20px -60px;
+      inset: -20px 0;
       background: radial-gradient(ellipse at 50% 50%, rgba(10,132,255,0.12) 0%, transparent 70%);
       pointer-events: none;
     }
