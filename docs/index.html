@@ -673,6 +673,59 @@
       .feature-img-wrap { padding: 20px 20px 0; }
       .feature-body { padding: 18px 20px 22px; }
     }
+
+    /* ── Gatekeeper note ── */
+    .gatekeeper-note {
+      margin-top: 4px;
+      max-width: 480px;
+      text-align: left;
+    }
+    .gatekeeper-note summary {
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      justify-content: center;
+      transition: color 0.15s;
+    }
+    .gatekeeper-note summary::-webkit-details-marker { display: none; }
+    .gatekeeper-note summary::before {
+      content: '▸';
+      font-size: 10px;
+      transition: transform 0.2s;
+    }
+    .gatekeeper-note[open] summary::before { transform: rotate(90deg); }
+    .gatekeeper-note summary:hover { color: var(--subtle); }
+    .gatekeeper-body {
+      margin-top: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .gatekeeper-body p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .gatekeeper-body strong { color: var(--subtle); }
+    .gatekeeper-body code {
+      display: block;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      color: var(--green);
+      background: rgba(48,209,88,0.07);
+      border: 1px solid rgba(48,209,88,0.2);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      letter-spacing: 0.01em;
+    }
   </style>
   <script defer src="https://cloud.umami.is/script.js" data-website-id="7ae56bf2-f55d-4364-acc8-9f7503eb03a6"></script>
 </head>
@@ -726,6 +779,14 @@
         <span>·</span>
         Free
       </span>
+      <details class="gatekeeper-note reveal">
+        <summary>macOS says the app is damaged?</summary>
+        <div class="gatekeeper-body">
+          <p>Gatekeeper blocks unsigned apps. PulseBar is safe — it just lacks a paid Apple notarization certificate. Fix it in one command:</p>
+          <code>xattr -cr /Applications/PulseBar.app</code>
+          <p>Or right-click the app → <strong>Open</strong> → click <strong>Open</strong> in the dialog.</p>
+        </div>
+      </details>
     </div>
     <div class="hero-image-wrap reveal reveal-delay-4">
       <img src="assets/Banner.png" alt="PulseBar app panels showing CPU, Memory, Network and Disk stats" />
