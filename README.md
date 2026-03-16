@@ -37,7 +37,17 @@ Click any one to open a panel focused on that category. Click elsewhere (or the 
 
 **[Download PulseBar v1.0.0](https://github.com/francescjimenez/PulseBar/releases/tag/v1.0.0)** — macOS (Apple Silicon)
 
-> If macOS blocks the app on first launch: right-click → Open, then click "Open" in the dialog.
+> **"PulseBar is damaged and can't be opened"?**
+> macOS Gatekeeper blocks apps downloaded from the internet that aren't notarized by Apple. PulseBar is safe — it just lacks a paid Apple Developer certificate yet.
+>
+> **Option A — Terminal (one-time fix):**
+> ```bash
+> xattr -cr /Applications/PulseBar.app
+> ```
+> Then open the app normally.
+>
+> **Option B — Without terminal:**
+> Right-click the app → **Open** → click **Open** in the dialog that appears.
 
 ---
 
