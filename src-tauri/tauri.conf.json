@@ -40,8 +40,7 @@
       "icons/icon.ico"
     ],
     "macOS": {
-      "signingIdentity": null,
-      "notarizationCredentials": null
+      "signingIdentity": null
     }
   }
 }
