@@ -132,15 +132,35 @@ fn handle_tray_click(
             None => return,
         };
 
-        let scale = window.scale_factor().unwrap_or(1.0);
+        // Find the monitor where the tray icon was clicked so the panel
+        // opens on the correct screen in multi-monitor setups.
+        let monitors = app.available_monitors().unwrap_or_default();
+        let clicked_monitor = monitors.iter().find(|m| {
+            let pos  = m.position();
+            let size = m.size();
+            position.x >= pos.x as f64
+                && position.x < (pos.x as f64 + size.width as f64)
+                && position.y >= pos.y as f64
+                && position.y < (pos.y as f64 + size.height as f64)
+        });
+
+        let (scale, monitor_logical_x, monitor_logical_y) = match clicked_monitor {
+            Some(m) => {
+                let s = m.scale_factor();
+                (s, m.position().x as f64 / s, m.position().y as f64 / s)
+            }
+            None => (window.scale_factor().unwrap_or(1.0), 0.0, 0.0),
+        };
+
         let logical_x = position.x / scale;
         let win_width = 360.0_f64;
         let height = panel_height(category);
-        let x = (logical_x - win_width / 2.0).max(0.0);
+        let x = (logical_x - win_width / 2.0).max(monitor_logical_x);
+        let y = monitor_logical_y + 28.0;
 
         *state.window_visible.lock().unwrap() = true;
         let _ = window.set_size(tauri::LogicalSize::new(win_width, height));
-        let _ = window.set_position(tauri::LogicalPosition::new(x, 28.0));
+        let _ = window.set_position(tauri::LogicalPosition::new(x, y));
         let _ = app.emit("category-selected", category);
         let _ = window.show();
         let _ = window.set_focus();
