@@ -598,6 +598,21 @@
       gap: 8px;
       flex-wrap: wrap;
     }
+    @keyframes heartbeat {
+      0%   { transform: scale(1); }
+      15%  { transform: scale(1.45); }
+      30%  { transform: scale(1); }
+      45%  { transform: scale(1.3); }
+      60%  { transform: scale(1); }
+    }
+    #heart-img {
+      cursor: pointer;
+      transition: transform 0.1s ease;
+      transform-origin: center;
+    }
+    #heart-img.beating {
+      animation: heartbeat 0.6s ease;
+    }
     .stack-badge {
       font-size: 11px;
       font-weight: 600;
@@ -929,7 +944,7 @@
   <div class="footer-left">
     <div class="footer-stack">
       <span style="font-size:13px; color: var(--muted);">Made with</span>
-      <img src="assets/heart.png" alt="heart" style="width:18px; height:18px; image-rendering:pixelated;" />
+      <img id="heart-img" src="assets/heart.png" alt="heart" style="width:18px; height:18px; image-rendering:pixelated;" />
       <span style="font-size:13px; color: var(--muted);">from Barcelona</span>
     </div>
     <span class="footer-copy">&copy; 2026 PulseBar. All rights reserved.</span>
@@ -974,6 +989,47 @@
   document.querySelectorAll('.hero .reveal').forEach(el => {
     setTimeout(() => el.classList.add('visible'), 80);
   });
+</script>
+
+<script>
+  (function () {
+    const heart = document.getElementById('heart-img');
+
+    // Synthesize a heartbeat sound using the Web Audio API
+    function playHeartbeat() {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+      function beat(time, gain) {
+        const osc = ctx.createOscillator();
+        const env = ctx.createGain();
+        osc.connect(env);
+        env.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(80, time);
+        osc.frequency.exponentialRampToValueAtTime(40, time + 0.12);
+        env.gain.setValueAtTime(0, time);
+        env.gain.linearRampToValueAtTime(gain, time + 0.02);
+        env.gain.exponentialRampToValueAtTime(0.001, time + 0.18);
+        osc.start(time);
+        osc.stop(time + 0.2);
+      }
+
+      const now = ctx.currentTime;
+      beat(now, 0.55);        // lub
+      beat(now + 0.22, 0.35); // dub
+    }
+
+    heart.addEventListener('click', function () {
+      // Trigger CSS animation (re-add class to restart)
+      heart.classList.remove('beating');
+      void heart.offsetWidth; // reflow
+      heart.classList.add('beating');
+      heart.addEventListener('animationend', () => heart.classList.remove('beating'), { once: true });
+
+      // Play sound
+      try { playHeartbeat(); } catch (e) {}
+    });
+  })();
 </script>
 
 </body>
