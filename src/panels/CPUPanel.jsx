@@ -6,9 +6,11 @@ import MetricRow from "../components/MetricRow";
 function TempBadge({ temp, label }) {
   if (temp == null) return null;
   const color = temp > 80 ? "#ff3b30" : temp > 60 ? "#ff9500" : "#30d158";
+  const severity = temp > 80 ? "High" : temp > 60 ? "Elevated" : "Normal";
   return (
     <div className="cpu-temp" style={{ color }}>
       {temp.toFixed(0)}° {label}
+      <span className="sr-only"> ({severity} temperature)</span>
     </div>
   );
 }
@@ -18,6 +20,7 @@ export default function CPUPanel({ stats, hist }) {
   const hasVram = stats.vram_total_mb > 0;
   const vramPct = hasVram ? (stats.vram_used_mb / stats.vram_total_mb) * 100 : 0;
   const vramColor = vramPct > 85 ? "#ff3b30" : vramPct > 65 ? "#ff9500" : "#30d158";
+  const vramSeverity = vramPct > 85 ? "High" : vramPct > 65 ? "Elevated" : "Normal";
 
   return (
     <div className="panel">
@@ -34,10 +37,17 @@ export default function CPUPanel({ stats, hist }) {
             <div className="cores-grid">
               {stats.cpu_cores.map((u, i) => (
                 <div key={i} className="core-col">
-                  <div className="core-bar-bg">
+                  <div
+                    className="core-bar-bg"
+                    role="progressbar"
+                    aria-valuenow={Math.round(Math.min(u, 100))}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-label={`Core ${i} usage`}
+                  >
                     <div className="core-bar-fill" style={{ height: `${Math.min(u, 100)}%`, background: "#0a84ff" }} />
                   </div>
-                  <div className="core-idx">{i}</div>
+                  <div className="core-idx" aria-hidden="true">{i}</div>
                 </div>
               ))}
             </div>
@@ -63,7 +73,15 @@ export default function CPUPanel({ stats, hist }) {
                 </span>
               </div>
               <MetricRow label="Total" value={`${(stats.vram_total_mb / 1024).toFixed(0)} GB`} />
-              <div className="disk-bar-bg" style={{ marginTop: 6 }}>
+              <div
+                className="disk-bar-bg"
+                role="progressbar"
+                aria-valuenow={Math.round(vramPct)}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label={`VRAM usage: ${Math.round(vramPct)}% (${vramSeverity})`}
+                style={{ marginTop: 6 }}
+              >
                 <div className="disk-bar-fill" style={{ width: `${vramPct}%`, background: vramColor }} />
               </div>
             </div>
@@ -76,7 +94,7 @@ export default function CPUPanel({ stats, hist }) {
         <span className="legend-label">CPU Usage</span>
         <span className="legend-val">{stats.cpu_usage.toFixed(1)}%</span>
       </div>
-      <BarChart primary={hist.cpu} colorP="#0a84ff" />
+      <BarChart primary={hist.cpu} colorP="#0a84ff" label="CPU usage history chart" />
 
       <ProcessList procs={stats.top_cpu_procs} colLabel="CPU" colValue={p => `${p.cpu_pct.toFixed(1)}%`} />
     </div>

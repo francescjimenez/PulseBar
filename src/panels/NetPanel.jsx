@@ -6,6 +6,8 @@ import { fmtNet, fmtGB, countryFlag } from "../utils";
 export default function NetPanel({ stats, hist }) {
   const wifiIcon = stats.wifi_ssid === "WiFi Off" ? "📵"
     : stats.wifi_ssid === "Not connected" ? "⚠️" : "📶";
+  const wifiIconLabel = stats.wifi_ssid === "WiFi Off" ? "WiFi Off"
+    : stats.wifi_ssid === "Not connected" ? "Not connected" : "Connected";
   const extFlag = countryFlag(stats.ext_country_code);
 
   return (
@@ -23,7 +25,7 @@ export default function NetPanel({ stats, hist }) {
         <span className="legend-dot" style={{ background: "#0a84ff", marginLeft: 8 }} />
         <span className="legend-label">Download</span>
       </div>
-      <BarChart primary={hist.netRx} colorP="#0a84ff" secondary={hist.netTx} colorS="#ff375f" />
+      <BarChart primary={hist.netRx} colorP="#0a84ff" secondary={hist.netTx} colorS="#ff375f" label="Network upload and download history chart" />
 
       <div className="metrics-list" style={{ marginTop: 10 }}>
         <MetricRow label="Peak ↑" value={fmtNet(stats.net_peak_tx_kbps)} />
@@ -33,7 +35,7 @@ export default function NetPanel({ stats, hist }) {
       <div className="metrics-list" style={{ marginTop: 8 }}>
         <div className="section-title" style={{ marginBottom: 6 }}>INTERFACE</div>
         {stats.wifi_ssid && (
-          <MetricRow label="WiFi" value={`${wifiIcon} ${stats.wifi_ssid}`} />
+          <MetricRow label="WiFi" value={<><span aria-hidden="true">{wifiIcon} </span><span aria-label={wifiIconLabel}>{stats.wifi_ssid}</span></>} />
         )}
         {stats.net_interface && (
           <MetricRow label={stats.net_interface} value={stats.net_ip} />
