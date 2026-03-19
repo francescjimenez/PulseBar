@@ -54,7 +54,7 @@ export default function App() {
     <div className="widget">
       <div className="panel-scroll">
         {!stats ? (
-          <div className="loading">Loading…</div>
+          <div className="loading" role="status" aria-live="polite">Loading…</div>
         ) : (
           <>
             {category === "cpu"  && <CPUPanel  stats={stats} hist={hist} />}

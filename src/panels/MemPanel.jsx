@@ -22,7 +22,7 @@ export default function MemPanel({ stats, hist }) {
         <span className="legend-label">RAM</span>
         <span className="legend-val">{stats.ram_used_gb.toFixed(1)} / {stats.ram_total_gb.toFixed(1)} GB</span>
       </div>
-      <BarChart primary={hist.ramPct} colorP="#bf5af2" />
+      <BarChart primary={hist.ramPct} colorP="#bf5af2" label="Memory usage history chart" />
 
       <div className="metrics-list">
         <MetricRow label="Used" value={`${stats.ram_used_gb.toFixed(1)} GB`} />
